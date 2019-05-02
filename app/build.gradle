@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+
+Properties appurlsProperties = new Properties()
+def propFile = rootProject.file('aws_creds.properties')
+appurlsProperties.load(new FileInputStream(propFile))
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        applicationId "com.google.android.gms.samples.vision.face.facetracker"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        buildConfigField "String", "S3_BUCKET", appurlsProperties['s3_bucket']
+        buildConfigField "String", "S3_ACCESS_KEY", appurlsProperties['s3_access_key']
+        buildConfigField "String", "S3_SECRETKEY", appurlsProperties['s3_secret']
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:28.0.0'
+    compile 'com.android.support:design:28.0.0'
+    compile 'com.google.android.gms:play-services-vision:9.4.0+'
+
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.12.+'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.12.+'
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.12.+'
+}
